@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="SlitherZone - A multiplayer snake battle royale game. Grow your snake, defeat opponents, and dominate the arena!">
+    <title>SlitherZone — Snake Battle Royale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Start Screen -->
+    <div id="start-screen">
+        <div class="start-bg-canvas" id="start-bg"></div>
+        <div class="start-content">
+            <div class="logo-container">
+                <h1 class="game-logo">
+                    <span class="logo-slither">Slither</span><span class="logo-zone">Zone</span>
+                </h1>
+                <p class="logo-tagline">Battle Royale Arena</p>
+            </div>
+            <div class="start-form">
+                <div class="input-wrapper">
+                    <input type="text" id="player-name" placeholder="Enter your name..." maxlength="16" autocomplete="off">
+                    <div class="input-glow"></div>
+                </div>
+                <div class="skin-selector">
+                    <p class="skin-label">Choose your skin</p>
+                    <div class="skin-options" id="skin-options">
+                        <div class="skin-option selected" data-skin="0" style="--skin-color-1: #ff006e; --skin-color-2: #ff4da6;">
+                            <div class="skin-preview"></div>
+                        </div>
+                        <div class="skin-option" data-skin="1" style="--skin-color-1: #00f5d4; --skin-color-2: #00bbf9;">
+                            <div class="skin-preview"></div>
+                        </div>
+                        <div class="skin-option" data-skin="2" style="--skin-color-1: #fee440; --skin-color-2: #f15bb5;">
+                            <div class="skin-preview"></div>
+                        </div>
+                        <div class="skin-option" data-skin="3" style="--skin-color-1: #9b5de5; --skin-color-2: #f15bb5;">
+                            <div class="skin-preview"></div>
+                        </div>
+                        <div class="skin-option" data-skin="4" style="--skin-color-1: #80ed99; --skin-color-2: #57cc99;">
+                            <div class="skin-preview"></div>
+                        </div>
+                        <div class="skin-option" data-skin="5" style="--skin-color-1: #ff9e00; --skin-color-2: #ff0000;">
+                            <div class="skin-preview"></div>
+                        </div>
+                        <div class="skin-option" data-skin="6" style="--skin-color-1: #4cc9f0; --skin-color-2: #4361ee;">
+                            <div class="skin-preview"></div>
+                        </div>
+                        <div class="skin-option" data-skin="7" style="--skin-color-1: #ffffff; --skin-color-2: #c0c0c0;">
+                            <div class="skin-preview"></div>
+                        </div>
+                    </div>
+                </div>
+                <button id="play-btn" class="play-button">
+                    <span class="btn-text">Play</span>
+                    <span class="btn-icon">▶</span>
+                    <div class="btn-glow"></div>
+                </button>
+            </div>
+            <div class="start-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="online-count">--</span>
+                    <span class="stat-label">Players Online</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="games-played">--</span>
+                    <span class="stat-label">Games Today</span>
+                </div>
+            </div>
+            <div class="controls-hint">
+                <p>🖱️ Mouse to steer &nbsp;|&nbsp; 🖱️ Click or <kbd>Space</kbd> to boost &nbsp;|&nbsp; <kbd>E</kbd> Eject mass</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game HUD -->
+    <div id="game-hud" class="hidden">
+        <div class="hud-top">
+            <div class="hud-score" id="hud-score">
+                <span class="score-label">Score</span>
+                <span class="score-value" id="score-value">0</span>
+            </div>
+            <div class="hud-length" id="hud-length">
+                <span class="length-label">Length</span>
+                <span class="length-value" id="length-value">10</span>
+            </div>
+            <div class="hud-kills" id="hud-kills">
+                <span class="kills-label">Kills</span>
+                <span class="kills-value" id="kills-value">0</span>
+            </div>
+        </div>
+        <div class="hud-boost" id="hud-boost">
+            <div class="boost-bar">
+                <div class="boost-fill" id="boost-fill"></div>
+            </div>
+            <span class="boost-label">BOOST</span>
+        </div>
+        <div class="hud-leaderboard" id="hud-leaderboard">
+            <h3 class="lb-title">🏆 Leaderboard</h3>
+            <ol class="lb-list" id="lb-list"></ol>
+        </div>
+        <div class="hud-minimap" id="hud-minimap">
+            <canvas id="minimap-canvas" width="180" height="180"></canvas>
+        </div>
+        <div class="hud-message" id="hud-message"></div>
+    </div>
+
+    <!-- Death Screen -->
+    <div id="death-screen" class="hidden">
+        <div class="death-overlay"></div>
+        <div class="death-content">
+            <h2 class="death-title">💀 You Died!</h2>
+            <div class="death-stats">
+                <div class="death-stat">
+                    <span class="ds-label">Final Score</span>
+                    <span class="ds-value" id="death-score">0</span>
+                </div>
+                <div class="death-stat">
+                    <span class="ds-label">Max Length</span>
+                    <span class="ds-value" id="death-length">0</span>
+                </div>
+                <div class="death-stat">
+                    <span class="ds-label">Kills</span>
+                    <span class="ds-value" id="death-kills">0</span>
+                </div>
+                <div class="death-stat">
+                    <span class="ds-label">Time Alive</span>
+                    <span class="ds-value" id="death-time">0:00</span>
+                </div>
+            </div>
+            <div class="death-killer" id="death-killer"></div>
+            <button id="respawn-btn" class="play-button respawn-button">
+                <span class="btn-text">Play Again</span>
+                <span class="btn-icon">↻</span>
+                <div class="btn-glow"></div>
+            </button>
+            <button id="menu-btn" class="menu-button">Back to Menu</button>
+        </div>
+    </div>
+
+    <!-- Game Canvas -->
+    <canvas id="game-canvas"></canvas>
+
+    <script src="script.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
